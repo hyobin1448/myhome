@@ -18,10 +18,13 @@ public class User {
 
     private String username;
     private String password;
+    private String phone;
+    private String name;
+    private String region;
+    private String community;
     private boolean enabled;
 
     @ManyToMany
-    @ToString.Exclude
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
