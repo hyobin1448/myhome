@@ -17,15 +17,45 @@
 <body class="text-center">
     <main class="form-signin">
         <form th:action="@{/account/register}" method="post">
-          <a th:href="@{/}"><img class="mb-4" th:src="@{/image/neo-logo.png}" alt="" width="200" height="200"></a>
-          <h1 class="h3 mb-3 fw-normal">회원가입</h1>
-           
-          <label for="username" class="visually-hidden">ID</label>
-          <input type="text" id="username" name="username" class="form-control" placeholder="Id" required autofocus>
-          <label for="inputPassword" class="visually-hidden">Password</label>
-          <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
-          
-          <button class="w-100 btn btn-lg btn-primary" type="submit">회원가입</button>
+            <a th:href="@{/}"><img class="mb-4" th:src="@{/image/neo-logo.png}" alt="" width="200" height="200"></a>
+            <h1 class="h3 mb-3 fw-normal">회원가입</h1>
+
+            <div>
+            <div class="form-floating mb-1">
+                <input type="text" class="form-control" id="username" name="username" placeholder="ID">
+                <label for="username">ID</label>
+            </div>
+            <div class="form-floating mb-1">
+                <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                <label for="password">Password</label>
+            </div>
+            </div>
+            <div class="form-floating mb-1">
+                <input type="text" class="form-control" id="username" name="username" placeholder="이름">
+                <label for="username">이름</label>
+            </div>
+            <div class="form-floating mb-1">
+                <input type="text" class="form-control" id="username" name="username" placeholder="세례명">
+                <label for="username">세례명</label>
+            </div>
+            <div class="form-floating mb-1">
+                <input type="text" class="form-control" id="username" name="username" placeholder="전화번호">
+                <label for="username">전화번호</label>
+            </div>
+            <div class="form-floating mb-1">
+                <input type="text" class="form-control" id="username" name="username" placeholder="소속 공동체">
+                <label for="username">소속 공동체</label>
+            </div>
+<!--            <label for="inputPassword" class="text-left">Password</label>-->
+<!--            <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required/>-->
+<!--            <label for="name" class="visually-hidden">이름</label>-->
+<!--            <input type="text" id="name" name="name" class="form-control" placeholder="이름">-->
+<!--            <label for="phone" class="visually-hidden">전화번호</label>-->
+<!--            <input type="text" id="phone" name="phone" class="form-control" placeholder="전화번호">-->
+<!--            <label for="community" class="visually-hidden">공동체</label>-->
+<!--            <input type="text" id="community" name="community" class="form-control" placeholder="공동체">-->
+
+            <button class="w-100 btn btn-lg btn-primary" type="submit">회원가입</button>
           <!-- <p class="mt-5 mb-3 text-muted">&copy; 2017-2020</p> -->
         </form>
       </main>
