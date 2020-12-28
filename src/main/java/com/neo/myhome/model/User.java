@@ -20,7 +20,7 @@ public class User {
     private String password;
     private String phone;
     private String name;
-    private String region;
+    private String christian;
     private String community;
     private boolean enabled;
 
