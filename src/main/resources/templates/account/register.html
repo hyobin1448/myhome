@@ -17,13 +17,21 @@
 <body class="text-center">
     <main class="form-signin">
         <form th:action="@{/account/register}" id="form" method="post">
+            <input type="hidden" id="isIdFlag" value="N">
+            <input type="hidden" id="isPwdFlag" value="N">
+            <input type="hidden" id="isPwdChkFlag" value="N">
             <a th:href="@{/}"><img class="mb-4" th:src="@{/image/neo-logo.png}" alt="" width="200" height="200"></a>
             <h1 class="h3 mb-3 fw-normal">회원가입</h1>
-
+            <div style="height:70px">
+                <div id="idCheck" class="alert alert-danger " style="display:none"></div>
+                <div id="pwdCheck" class="alert alert-danger " style="display:none"></div>
+            </div>
             <div>
             <div class="form-floating mb-1 ">
-                <input type="text" class="form-control" id="username" name="username" placeholder="ID" required> 
-                <label for="username">ID</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="ID (4자리 이상)" required>
+                <label for="username">ID (4자리 이상)</label>
+            </div>
+            
             </div>
             <div class="form-floating mb-1">
                 <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
@@ -32,20 +40,19 @@
             <div class="form-floating mb-1">
                 <input type="password" class="form-control" id="passwordChk" name="passwordChk" placeholder="비밀번호 확인" required>
                 <label for="passwordChk">비밀번호 확인</label>
-                <
             </div>
             </div>
             <div class="row">
                 <div class="col">
                     <div class="form-floating mb-1">
                         <input type="text" class="form-control" id="name" name="name" placeholder="이름" required>
-                        <label for="username">이름</label>
+                        <label for="name">이름</label>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-floating mb-1">
                         <input type="text" class="form-control" id="christian" name="christian" placeholder="세례명" required>
-                        <label for="username">세례명</label>
+                        <label for="christian">세례명</label>
                     </div>
                 </div>
             </div>
@@ -53,13 +60,13 @@
                 <div class="col">
                     <div class="form-floating mb-1">
                         <input type="tel" class="form-control onlyNumber" id="phone" name="phone" placeholder="전화번호" required>
-                        <label for="username">전화번호</label>
+                        <label for="phone">전화번호</label>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-floating mb-1">
                         <input type="text" class="form-control" id="community" name="community" placeholder="소속 공동체" required>
-                        <label for="username">소속 공동체</label>
+                        <label for="community">소속 공동체</label>
                     </div>
                 </div>
             </div>
@@ -87,26 +94,104 @@
                 divPasswordChk.addClass("is-invalid");
             }
         });
+        $('#password').keyup(function(event){
+            var password = $('#password').val();
+            var divPasswordChk = $('#passwordChk');
+            if(password.length<8){
+                $('#pwdCheck').text("비밀번호는 8자리 이상입니다.");
+                divPasswordChk.addClass("is-invalid");
+                $('#pwdCheck').attr('class','alert alert-danger');
+                $('#pwdCheck').show();
+                $('#isPwdFlag').val("N");
+            }else{
+                divPasswordChk.removeClass("is-invalid");
+                $('#isPwdFlag').val("Y");
+                $('#pwdCheck').text("");
+                $('#pwdCheck').hide();
+            }
+
+        });
+        $('#passwordChk').keyup(function(event){
+            var passwordChk = $('#passwordChk').val();
+            var password = $('#password').val();
+            var divPasswordChk = $('#passwordChk');
+            if(password==passwordChk){
+                divPasswordChk.removeClass("is-invalid");
+                $('#isPwdChkFlag').val("Y");
+                $('#pwdCheck').text("");
+                $('#pwdCheck').hide();
+            }else{
+                divPasswordChk.addClass("is-invalid");
+                $('#isPwdChkFlag').val("N");
+                $('#pwdCheck').text("비밀번호가 다릅니다.");
+                $('#pwdCheck').attr('class','alert alert-danger');
+                $('#pwdCheck').show();
+            }
+        });
+        $('#username').focusout(function(event){
+            var flag = $('#isIdFlag').val();
+            var id = $("#username").val();
+            if(id.length<=3){
+                $('#idCheck').text("ID는 4자리 이상 입력해주세요");    
+                $('#idCheck').attr('class','alert alert-danger');
+                $('#idCheck').show();                
+            }else if(flag=="Y"){
+                $('#idCheck').text("");
+                $('#idCheck').hide();
+            }
+        });
         $('#username').keyup(function(event){
-            $.ajax({
+            var id = $("#username").val();
+            if(id.length <= 3){
+                $('#idCheck').text("");
+                $('#idCheck').hide();
+            }else{
+                $.ajax({
                 type :"GET",
                 url: "/account/idCheck",
+                dataType:"text",
                 data : {
-                    username:$("#username").val()
-                },
-                success :function(data){
-                    if(data.data == 'Y'){
-                        console.log("아이디있음");
-                    }else{
-                        console.log("아이디없음");
-                    }
+                    username:id
                 }
-            });
+                }).done(function(data){
+                    $('#idCheck').show();
+                    if(data == 'Y'){
+                        $('#idCheck').text("중복된 ID가 있습니다.");
+                        $('#isIdFlag').val("N");
+                        $('#idCheck').attr('class','alert alert-danger');
+                    }else{
+                        $('#idCheck').text("사용 가능한 ID 입니다.");
+                        $('#idCheck').attr('class','alert alert-primary');
+                        $('#isIdFlag').val("Y");
+                    }
+                })
+            }
+            
+        });
+        $('#phone').focusout(function(event){
+            var phoneNo = $('#phone').val()
+            phoneNo = phoneNo.replace(/ /gi, "").replace(/-/gi, "");
+            $("#phone").val(phoneNo);
         });
         $('#form').submit(function(event){
-            
-            console.log($('#name').val());
-            return false;
+            var id = $("username").val();
+            var pw = $("password").val();
+            var nm = $("name").val();
+            if( $('#isIdFlag').val()=='N'){
+                $('#username').focus();
+                alert('중복된 ID가 있습니다.');
+                return false;
+            }
+            if($('#isPwdFlag').val()=='N'){
+                $('#passwordChk').focus();
+                alert('비밀번호는 8자리 이상입니다.');
+                return false;
+            }
+            if( $('#isPwdChkFlag').val()=='N'){
+                $('#passwordChk').focus();
+                alert('비밀번호가 맞지 않습니다.');
+                return false;
+            }
         });
 
     </script>

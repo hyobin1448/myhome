@@ -6,9 +6,11 @@ import com.neo.myhome.repository.UserRepository;
 import com.neo.myhome.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,16 +31,16 @@ public class AccountController {
 
 
     @GetMapping("/idCheck")
-    public Map idCheck(String username){
+    @ResponseBody
+    public String idCheck(Model model, String username){
         User checkUser = userRepository.findByUsername(username);
-        Map result = new HashMap<String,String>();
+
         if(checkUser != null) {
-            result.put("data","Y");
-            return result;
+            return "Y";
         }else{
-            result.put("data","N");
-            return result;
+            return "N";
         }
+
     }
     @GetMapping("/register")
     public String register(){
