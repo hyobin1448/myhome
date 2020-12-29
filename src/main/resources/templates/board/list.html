@@ -2,38 +2,45 @@
 <html lang="en">
 
 <head th:replace="fragments/common :: head('게시판')">
+
 </head>
+
 
 <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('list')" />
 
     <main class="container">
-        <h2>게시판</h2>
+        <h2>목차</h2>
         <div>총 건수 : <span th:text="${#lists.size(boards)}"></span></div>
-        <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th scope="=col">번호</th>
-                    <th scope="=col">제목</th>
-                    <th scope="=col">작성자</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="board : ${boards}">
-                    <th th:text="${board.id}"> </th>
-                    <th ><a th:text="${board.title}" th:href="@{/board/form(id=${board.id})}"></a></th>
-                    <th th:text="${board.user.username}"> </th>
-                </tr>
-            </tbody>
-        </table>
-        <div class="text-end">
+        <div id="list">
+            <form class="d-flex justify-content-end" action="/board/searchList" method="GET">
+                <input class="p-2 bd-highlight" name="data"type="search" placeholder="검색" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">검색</button>
+            </form>
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th scope="=col">번호</th>
+                        <th scope="=col">제목</th>
+                        <th scope="=col">카포</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="board,index : ${boards}" >
+                        <th th:text="${board.id}"> </th>
+                        <th ><a th:text="${board.title}" th:href="@{/board/form(id=${board.id})}"></a></th>
+                        <th>0칸</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="text-end" sec:authorize="hasRole('ROLE_ADMIN')">
             <a type="button" class="btn btn-primary" th:href="@{/board/form}">글쓰기</a>
         </div>
-    </main><!-- /.container -->
 
-    <!-- Optional JavaScript; choose one of the two! -->
 
-    <!-- Option 1: Bootstrap Bundle with Popper -->
+    </main>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
         crossorigin="anonymous"></script>
