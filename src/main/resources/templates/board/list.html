@@ -11,7 +11,6 @@
 
     <main class="container">
         <h2>목차</h2>
-        <div>총 건수 : <span th:text="${#lists.size(boards)}"></span></div>
         <div id="list">
             <form class="d-flex justify-content-end" action="/board/searchList" method="GET">
                 <input class="p-2 bd-highlight" name="data"type="search" placeholder="검색" aria-label="Search">
@@ -26,16 +25,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="board,index : ${boards}" >
-                        <th th:text="${board.id}"> </th>
-                        <th ><a th:text="${board.title}" th:href="@{/board/form(id=${board.id})}"></a></th>
+                    <tr th:each="item,index : ${musics}" th:onclick="'location.href=\''+@{/board/form(id=${item.title})}+'\''">
+                        <th th:text="${item.id}"> </th>
+                        <th ><a th:text="${item.title}"></a></th>
                         <th>0칸</th>
                     </tr>
                 </tbody>
             </table>
         </div>
         <div class="text-end" sec:authorize="hasRole('ROLE_ADMIN')">
-            <a type="button" class="btn btn-primary" th:href="@{/board/form}">글쓰기</a>
+            <a type="button" class="btn btn-primary" th:href="@{/board/formAdd}">글쓰기</a>
         </div>
 
 
@@ -46,12 +45,12 @@
         crossorigin="anonymous"></script>
 
     <!-- Option 2: Separate Popper and Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"
-        integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js"
-        integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj"
-        crossorigin="anonymous"></script>
+<!--    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"-->
+<!--        integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU"-->
+<!--        crossorigin="anonymous"></script>-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js"-->
+<!--        integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj"-->
+<!--        crossorigin="anonymous"></script>-->
 </body>
 
 </html>

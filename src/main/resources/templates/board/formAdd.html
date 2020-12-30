@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+
+<head th:replace="fragments/common :: head('게시판')">
+</head>
+
+<body>
+
+
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('list')" />
+
+    <main class="container">
+        <center >
+            <h2>게시판</h2>
+
+            <form action="#" th:action="@{/board/formAdd}" th:object="${item}" method="post">
+                <div style="padding-top:20px; padding-bottom:20px">
+                    <label>제목</label>
+                    <input type="text" style="width:300px;" th:field="*{title}">
+                    <label style="padding-left:20px">번호</label>
+                    <input type="text"  style="width:50px;" th:field="*{id}">
+                    <button type="button" id="btnAdd" >추가</button>
+                </div>
+                <table id="itemTable">
+                    <thead>
+                        <th width="30">
+                        </th>
+                        <th width="500">
+                        </th>
+                        <th width="30">
+                        </th>
+                        <th width="500">
+                        </th>
+                    </thead>
+                    <tbody th:each="detailItem,index : ${item.items}">
+                        <tr>
+                            <input type="hidden" th:value="${index.index}"/>
+                            <td width="10"></td>
+                            <td>
+                                <input type="text" style="color:red; width:100%;" th:value="${detailItem.leftCode}" th:field="*{items[__${index.index}__].leftCode}"></input>
+                            </td>
+                            <td width="10"></td>
+                            <td>
+                                <input type="text" style="color:red; width:100%;"  th:value="${detailItem.rightCode}" th:field="*{items[__${index.index}__].rightCode}"></input>
+                            </td>
+                        </tr>
+                        <tr >
+                            <td width="10">
+                                <select class="select" style="width:50px;" th:value="${detailItem.leftChorus}" th:field="*{items[__${index.index}__].leftChorus}">
+                                    <option value=""></option>
+                                    <option value="독.　">독.　</option>
+                                    <option value="합.　">합.　</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" style="width:100%;"  th:value="${detailItem.leftLyrics}" th:field="*{items[__${index.index}__].leftLyrics}"></input>
+                            </td>
+                            <td width="10">
+                                <select class="select" style="width:50px;"  th:value="${detailItem.rightChorus}" th:field="*{items[__${index.index}__].rightChorus}">
+                                    <option value=""></option>
+                                    <option value="독.　">독.　</option>
+                                    <option value="합.　">합.　</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" style="width:100%;"  th:value="${detailItem.rightLyrics}" th:field="*{items[__${index.index}__].rightLyrics}"></input>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button type="submit">저장</button>
+            </form>
+
+
+        </center>
+    </main>
+    <script type="text/javascript">
+        var index = 1;
+        $('#btnAdd').click(function(event){
+            $('#itemTable > tbody:last').append('<tr><input type="hidden" value="'+index+'"/>'
+            +'<td width="10"></td><td>'
+            +'<input type="text" style="color:red; width:100%;" name="items['+index+'].leftCode"></input>'
+            +'</td><td width="10"></td><td>'
+            +'<input type="text" style="color:red; width:100%;" name="items['+index+'].rightCode"></input>'
+            +'</td></tr>'
+            +' <tr ><td width="10">'
+            +'<select class="select" style="width:50px;" name="items['+index+'].leftChorus">'
+            +'<option value=""></option><option value="독.　">독.　</option><option value="합.　">합.　</option></select></td><td>'
+            +'<input type="text" style="width:100%;" name="items['+index+'].leftLyrics">'
+            +'</input></td><td width="10">'
+            +'<select class="select" style="width:50px;" name="items['+index+'].rightChorus">'
+            +'<option value=""></option><option value="독.　">독.　</option><option value="합.　">합.　</option></select></td><td>'
+            +'<input type="text" style="width:100%;" name="items['+index+'].rightLyrics"></input></td></tr>');
+            index = index+1;
+        });
+    </script>
+</body>
+
+</html>
