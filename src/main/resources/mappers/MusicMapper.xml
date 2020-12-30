@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neo.myhome.dao.MusicDao"><!--namespace를 통해 UserDAO와 연결합니다. -->
+
+    <resultMap id="musicMap" type="com.neo.myhome.model.MusicItem">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <collection property="items" resultMap="lyricsMap"></collection>
+    </resultMap>
+    <resultMap id="lyricsMap" type="com.neo.myhome.model.Lyrics">
+        <result column="id" property="id"/>
+        <result column="seq" property="seq"/>
+        <result column="leftChorus" property="leftChorus"/>
+        <result column="leftCode" property="leftCode"/>
+        <result column="leftLyrics" property="leftLyrics"/>
+        <result column="rightChorus" property="rightChorus"/>
+        <result column="rightCode" property="rightCode"/>
+        <result column="rightLyrics" property="rightLyrics"/>
+    </resultMap>
+    <select id="searchMusicList" resultType="com.neo.myhome.model.MusicItem">
+        SELECT id, title
+        FROM music
+        <if test="title != null and !title.equals('')">
+            WHERE title LIKE  CONCAT('%',#{title},'%')
+
+        </if>
+    </select>
+    <select id="searchMusicItem" resultMap="musicMap">
+        SELECT  m.id,
+                m.title,
+                l.seq,
+                l.leftChorus,
+                l.leftCode,
+                l.leftLyrics,
+                l.rightChorus,
+                l.rightCode,
+                l.rightLyrics
+        FROM music m LEFT OUTER JOIN lyrics l ON m.id = l.music_id
+        ORDER BY l.SEQ
+    </select>
+
+</mapper>
