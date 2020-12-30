@@ -87,15 +87,7 @@ public class BoardController {
     }
     @PostMapping("/formAdd")
     public String formAddSubmit(@Valid MusicItem item, BindingResult bindingResult, Authentication authentication){
-
-        if (bindingResult.hasErrors()) {
-            return "board/form";
-
-        }
-        Authentication a = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-
-
+        musicService.insertMusicItem(item);
         return "redirect:/board/list";
     }
 }

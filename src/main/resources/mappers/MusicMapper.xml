@@ -37,8 +37,18 @@
                 l.rightChorus,
                 l.rightCode,
                 l.rightLyrics
-        FROM music m LEFT OUTER JOIN lyrics l ON m.id = l.music_id
+        FROM music m LEFT OUTER JOIN lyrics l ON m.id = l.id
         ORDER BY l.SEQ
     </select>
-
+    <insert id="insertItem" parameterType="com.neo.myhome.model.MusicItem">
+        INSERT INTO music
+        (`id`, `title`)
+        VALUES
+        (#{id}, #{title})
+    </insert>
+    <insert id="insertDetailItem" parameterType="com.neo.myhome.model.Lyrics">
+        INSERT INTO lyrics (`id`, `seq`, `leftChorus`, `leftCode`, `leftLyrics`, `rightChorus`, `rightCode`, `rightLyrics`)
+        VALUES
+        (#{id}, #{seq}, #{leftChorus}, #{leftCode}, #{leftLyrics}, #{rightChorus}, #{rightCode}, #{rightLyrics})
+    </insert>
 </mapper>
