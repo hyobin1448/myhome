@@ -35,6 +35,9 @@
                 </tr>
                 </tbody>
             </table>
+            <div class="text-end" sec:authorize="hasRole('ROLE_ADMIN')">
+                <a type="button" class="btn btn-primary" th:href="@{/board/formAdd(id=${musicItem.id})}">수정</a>
+            </div>
         </center>
     </main>
 </body>
