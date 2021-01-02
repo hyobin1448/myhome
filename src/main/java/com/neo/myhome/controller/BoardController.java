@@ -1,24 +1,32 @@
 package com.neo.myhome.controller;
 
 import com.neo.myhome.model.Board;
+import com.neo.myhome.model.Capo;
 import com.neo.myhome.model.Lyrics;
 import com.neo.myhome.model.MusicItem;
 import com.neo.myhome.repository.BoardRepository;
 import com.neo.myhome.service.BoardService;
 import com.neo.myhome.service.MusicService;
 import com.neo.myhome.validator.BoardValidator;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,27 +46,41 @@ public class BoardController {
     private BoardValidator boardValidator;
 
     @GetMapping("/list")
-    public String list(Model model){
-        List<MusicItem> musics = musicService.searchMusicList(null);
+    public String list(Model model, MusicItem item){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        item.setUsername(username);
+
+        List<MusicItem> musics = musicService.searchMusicList(item);
         model.addAttribute("musics",musics);
         return "board/list";
     }
     @GetMapping("/searchList")
     public String searchList(Model model, String data){
-        List<MusicItem> musics = musicService.searchMusicList(data);
+        MusicItem item = new MusicItem();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        item.setUsername(username);
+        item.setTitle(data);
+        List<MusicItem> musics = musicService.searchMusicList(item);
         model.addAttribute("musics",musics);
         return "board/list";
     }
 
     @GetMapping("/form")
     public String form(Model model, @RequestParam(required = false) String id){
-        MusicItem item = musicService.searchMusicItem(id);
+        MusicItem item = new MusicItem();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        item.setUsername(username);
+        item.setId(id);
+        item = musicService.searchMusicItem(item);
         model.addAttribute("musicItem",item);
         return "board/form2";
     }
     @GetMapping("/formAdd")
     public String formAdd(Model model, String id){
-        MusicItem item;
+        MusicItem item = new MusicItem();
         if(id==null) {
             item = new MusicItem();
             List<Lyrics> list = new ArrayList<>();
@@ -66,7 +88,8 @@ public class BoardController {
             list.add(lyricsItem);
             item.setItems(list);
         }else{
-            item = musicService.searchMusicItem(id);
+            item.setId(id);
+            item = musicService.searchMusicItem(item);
         }
 
         model.addAttribute("item", item);
@@ -87,8 +110,67 @@ public class BoardController {
     }
     @PostMapping("/formAdd")
     public String formAddSubmit(@Valid MusicItem item, BindingResult bindingResult, Authentication authentication){
-        musicService.insertMusicItem(item);
+        MusicItem checkItem = musicService.searchMusicItem(item);
+        if(checkItem == null){
+            musicService.insertMusicItem(item);
+        }else{
+            musicService.updateMusicItem(item);
+        }
+
         return "redirect:/board/list";
+    }
+    @GetMapping("/capoChange")
+    @ResponseBody
+    public String capoChange(String capo, String id){
+        Authentication a = SecurityContextHolder.getContext().getAuthentication();
+        Capo item = new Capo();
+        item.setCapo(capo);
+        item.setMusicId(id);
+        item.setUserId(a.getName());
+        musicService.insertCapo(item);
+        return "Y";
+
+    }
+    @GetMapping("/music")
+    @ResponseBody
+    public ResponseEntity<InputStreamResource> music(String id) throws IOException {
+        String end ="";
+
+        if(id.indexOf("_")==-1){
+            id = id;
+        }else{
+            end = id.substring(id.indexOf("_"));
+            id = id.substring(0,id.indexOf("_"));
+        }
+        id = "000".substring(id.length())+id+end;
+
+        ClassPathResource resource = new ClassPathResource("mp3/music"+id+".mp3");
+        File file = resource.getFile();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-disposition","attachment; filename=music"+id+".mp3");
+        return ResponseEntity.ok().headers(headers).contentLength(file.length())
+                .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .body(new InputStreamResource(new FileInputStream(file)));
+    }
+    @GetMapping("/image")
+    @ResponseBody
+    public byte[] image(String id) throws IOException {
+        String end ="";
+
+        if(id.indexOf("_")==-1){
+            id = id;
+        }else{
+            end = id.substring(id.indexOf("_"));
+            id = id.substring(0,id.indexOf("_"));
+        }
+        id = "000".substring(id.length())+id+end;
+
+        ClassPathResource resource = new ClassPathResource("image/music"+id+".jpg");
+        File file = resource.getFile();
+        InputStream io = resource.getInputStream();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-disposition","attachment; filename=music"+id+".jpg");
+        return IOUtils.toByteArray(io);
     }
 }
 //        MusicItem item = new MusicItem();

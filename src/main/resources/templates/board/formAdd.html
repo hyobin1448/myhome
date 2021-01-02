@@ -51,6 +51,7 @@
                                     <option value=""></option>
                                     <option value="독.　">독.　</option>
                                     <option value="합.　">합.　</option>
+                                    <option value="사.　">사.　</option>
                                 </select>
                             </td>
                             <td>
@@ -61,6 +62,7 @@
                                     <option value=""></option>
                                     <option value="독.　">독.　</option>
                                     <option value="합.　">합.　</option>
+                                    <option value="사.　">사.　</option>
                                 </select>
                             </td>
                             <td>
@@ -75,8 +77,8 @@
 
         </center>
     </main>
-    <script type="text/javascript">
-        var index = 1;
+    <script th:inline="javascript">
+        var index = /*[(${item.items.size})]*/;
         $('#btnAdd').click(function(event){
             $('#itemTable > tbody:last').append('<tr><input type="hidden" value="'+index+'"/>'
             +'<td width="10"></td><td>'
@@ -86,11 +88,11 @@
             +'</td></tr>'
             +' <tr ><td width="10">'
             +'<select class="select" style="width:50px;" name="items['+index+'].leftChorus">'
-            +'<option value=""></option><option value="독.　">독.　</option><option value="합.　">합.　</option></select></td><td>'
+            +'<option value=""></option><option value="독.　">독.　</option><option value="합.　">합.　</option><option value="사.　">사.　</option></select></td><td>'
             +'<input type="text" style="width:100%;" name="items['+index+'].leftLyrics">'
             +'</input></td><td width="10">'
             +'<select class="select" style="width:50px;" name="items['+index+'].rightChorus">'
-            +'<option value=""></option><option value="독.　">독.　</option><option value="합.　">합.　</option></select></td><td>'
+            +'<option value=""></option><option value="독.　">독.　</option><option value="합.　">합.　</option><option value="사.　">사.　</option></select></td><td>'
             +'<input type="text" style="width:100%;" name="items['+index+'].rightLyrics"></input></td></tr>');
             index = index+1;
         });

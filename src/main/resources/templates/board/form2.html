@@ -7,9 +7,31 @@
 <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('list')" />
     <main class="container">
+        <div class="text-end">
+            <input type="hidden" id="changeFlag" value="m">
+            <a type="button" class="text-end btn btn-primary" id="change">이미지로 변경</a>
+        </div>
+            <center><h2 id="musicTitle" style="color:red" th:text="${musicItem.title}"></h2>
+                <p style="float:right; " th:text="${musicItem.id}" id="id" name="id"></p>
+
+            </center>
+
+            <p>카포
+                <select class="select" style="width:50px;" id="capo" name="capo">
+                    <option value="0" th:selected="${musicItem.capo} == 0">0</option>
+                    <option value="1" th:selected="${musicItem.capo} == 1">1</option>
+                    <option value="2" th:selected="${musicItem.capo} == 2">2</option>
+                    <option value="3" th:selected="${musicItem.capo} == 3">3</option>
+                    <option value="4" th:selected="${musicItem.capo} == 4">4</option>
+                    <option value="5" th:selected="${musicItem.capo} == 5">5</option>
+                    <option value="6" th:selected="${musicItem.capo} == 6">6</option>
+                </select>칸
+
+            </p>
+
         <center >
-            <h2 style="color:red" th:text="${musicItem.title}"></h2>
-            <table>
+            <img id="musicImage" th:src="@{/board/image(id=${musicItem.id})}" width="80%" style="display:none">
+            <table id="musicTable">
                 <thead>
                     <th width="10">
                     </th>
@@ -35,11 +57,44 @@
                 </tr>
                 </tbody>
             </table>
-            <div class="text-end" sec:authorize="hasRole('ROLE_ADMIN')">
-                <a type="button" class="btn btn-primary" th:href="@{/board/formAdd(id=${musicItem.id})}">수정</a>
-            </div>
+            <audio controls th:src="@{/board/music(id=${musicItem.id})}" style="margin-top:30px">
+            </audio>
         </center>
+
+        <div class="text-end" sec:authorize="hasRole('ROLE_ADMIN')">
+            <a type="button" class="text-end btn btn-primary" th:href="@{/board/formAdd(id=${musicItem.id})}">수정</a>
+        </div>
     </main>
+    <script type="text/javascript">
+        $('#capo').change(function(event){
+            var id = $('#id').text();
+            var b = id;
+            $.ajax({
+                type :"GET",
+                url: "/board/capoChange",
+                data : {
+                    capo:$('#capo').val(),
+                    id:$('#id').text()
+                }
+                });
+        });
+        $('#change').click(function(){
+            if($('#changeFlag').val()=='m'){
+                $('#musicImage').show();
+                $('#musicTable').hide();
+                $('#musicTitle').hide();
+                $('#id').hide();
+                $('#changeFlag').val("i");
+            }else{
+                $('#musicImage').hide();
+                $('#musicTable').show();
+                $('#musicTitle').show();
+                $('#id').show();
+                $('#changeFlag').val("m");
+            }
+
+        });
+    </script>
 </body>
 
 </html>

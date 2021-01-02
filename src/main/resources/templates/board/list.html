@@ -13,7 +13,7 @@
         <h2>목차</h2>
         <div id="list">
             <form class="d-flex justify-content-end" action="/board/searchList" method="GET">
-                <input class="p-2 bd-highlight" name="data"type="search" placeholder="검색" aria-label="Search">
+                <input class="p-2 bd-highlight" name="data" type="search" placeholder="검색(가사 검색 가능)" aria-label="Search">
                 <button class="btn btn-outline-success" type="submit">검색</button>
             </form>
             <table class="table table-hover">
@@ -25,10 +25,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="item,index : ${musics}" th:onclick="'location.href=\''+@{/board/form(id=${item.title})}+'\''">
+                    <tr th:each="item,index : ${musics}" th:onclick="'location.href=\''+@{/board/form(id=${item.id})}+'\''">
                         <th th:text="${item.id}"> </th>
                         <th ><a th:text="${item.title}"></a></th>
-                        <th>0칸</th>
+                        <th th:text="${item.capo+'칸'}"></th>
                     </tr>
                 </tbody>
             </table>

@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 @Data
 public class Lyrics implements Serializable {
-    private int id;
+    private String id;
 	private int seq;
 	private String leftChorus;
     private String leftCode;

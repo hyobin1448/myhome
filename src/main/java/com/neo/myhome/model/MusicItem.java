@@ -7,9 +7,10 @@ import java.util.List;
 
 @Data
 public class MusicItem implements Serializable {
-	private int id;
+	private String id;
     private String title;
     private String number;
     private String capo;
+    private String username;
 	private List<Lyrics> items;
 }

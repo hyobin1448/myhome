@@ -28,7 +28,7 @@
                         <a class="nav-link "  th:classappend="${menu}=='home'? 'active'"  th:href="@{/}" aria-current="page">홈</span></a>
                     </li>
                     <li class="nav-item " >
-                        <a class="nav-link " th:classappend="${menu}=='list'? 'active'" th:href="@{/board/list}" aria-current="page">게시판 <span class="sr-only" th:if="${menu}=='list'"></span></a>
+                        <a class="nav-link " th:classappend="${menu}=='list'? 'active'" th:href="@{/board/list}" aria-current="page">노래 <span class="sr-only" th:if="${menu}=='list'"></span></a>
                     </li>
                   
                 </ul>
@@ -38,7 +38,7 @@
                 <a class="btn btn-secondary my-2 my-sm-0" th:href="@{/account/register}" 
                     sec:authorize="!isAuthenticated()">회원가입</a>
                 <form class="form-inline my-2 my-lg-0" th:action="@{/logout}" method="POST" sec:authorize="isAuthenticated()">
-                    <span class="text-white mx-2" sec:authentication="principal.user.name">사용자</span>
+<!--                    <span class="text-white mx-2" sec:authentication="principal.user">사용자</span>-->
 <!--                    <span class="text-white mx-2" sec:authentication="principal.authorities">권한</span>-->
                     <!-- <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"> -->
                     <button class="btn btn-secondary my-2 my-sm-0" type="submit">로그아웃</button>

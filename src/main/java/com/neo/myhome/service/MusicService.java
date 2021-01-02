@@ -1,6 +1,7 @@
 package com.neo.myhome.service;
 
 import com.neo.myhome.dao.MusicDao;
+import com.neo.myhome.model.Capo;
 import com.neo.myhome.model.Lyrics;
 import com.neo.myhome.model.MusicItem;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +14,12 @@ public class MusicService {
     @Autowired
     private MusicDao dao;
 
-    public List<MusicItem> searchMusicList(String title){
-        return dao.searchMusicList(title);
+
+    public List<MusicItem> searchMusicList(MusicItem item){
+        return dao.searchMusicList(item);
     }
-    public MusicItem searchMusicItem(String id){
-        return dao.searchMusicItem(id);
+    public MusicItem searchMusicItem(MusicItem item){
+        return dao.searchMusicItem(item);
     }
     public void insertMusicItem(MusicItem item){
         dao.insertItem(item);
@@ -29,5 +31,18 @@ public class MusicService {
             dao.insertDetailItem(detailItem);
         }
     }
+    public void updateMusicItem(MusicItem item){
+        dao.deleteDetailItem(item.getId());
+        dao.updateItem(item);
+        for(int i=0; i<item.getItems().size();i++){
+            Lyrics detailItem = item.getItems().get(i);
+            detailItem.setId(item.getId());
+            detailItem.setSeq(i);
+            dao.insertDetailItem(detailItem);
+        }
+    }
 
+    public void insertCapo(Capo item){
+        dao.insertCapo(item);
+    }
 }
