@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Controller
 @RequestMapping("/account")
 public class AccountController {
@@ -29,7 +26,6 @@ public class AccountController {
         return "account/login";
     }
 
-
     @GetMapping("/idCheck")
     @ResponseBody
     public String idCheck(Model model, String username){
@@ -40,20 +36,25 @@ public class AccountController {
         }else{
             return "N";
         }
-
     }
+
     @GetMapping("/register")
     public String register(){
         return "account/register";
     }
 
-
     @PostMapping("/register")
     public String register(User user){
-
-
-            userService.save(user);
-            return "redirect:/";
-
+        userService.save(user);
+        return "redirect:/";
+    }
+    @GetMapping("/findTeresia")
+    @ResponseBody
+    public String findTeresia(String id){
+        User checkUser = userRepository.findByUsername(id);
+        if(checkUser != null && checkUser.getName().equals("이소영")){
+            return "Y";    
+        }
+        return "N";
     }
 }
