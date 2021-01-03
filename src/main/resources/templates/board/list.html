@@ -11,6 +11,9 @@
 
     <main class="container">
         <h2>목차</h2>
+        <div class="text-end" sec:authorize="hasRole('ROLE_ADMIN')">
+            <a type="button" class="btn btn-primary" th:href="@{/board/formAdd}">글쓰기</a>
+        </div>
         <div id="list">
             <form class="d-flex justify-content-end" action="/board/searchList" method="GET">
                 <input class="p-2 bd-highlight" name="data" type="search" placeholder="검색(가사 검색 가능)" aria-label="Search">
@@ -33,9 +36,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="text-end" sec:authorize="hasRole('ROLE_ADMIN')">
-            <a type="button" class="btn btn-primary" th:href="@{/board/formAdd}">글쓰기</a>
-        </div>
+
 
 
     </main>
