@@ -35,20 +35,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll();
     }
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth)
-            throws Exception {
-        auth.jdbcAuthentication()
-                .dataSource(dataSource)
-                .passwordEncoder(passwordEncoder())
-                .usersByUsernameQuery("select username,password,enabled " // 인증
-                        + "from user "
-                        + "where username = ?")
-                .authoritiesByUsernameQuery("select u.username,r.role " // 권한
-                        + "from user_role ur inner join user u on ur.user_id = u.id "
-                        + "inner join role r on ur.role_id = r.id "
-                        + "where u.username = ?");
-    }
+//    @Autowired
+//    public void configureGlobal(AuthenticationManagerBuilder auth)
+//            throws Exception {
+//        auth.jdbcAuthentication()
+//                .dataSource(dataSource)
+//                .passwordEncoder(passwordEncoder())
+//                .usersByUsernameQuery("select username,password,enabled " // 인증
+//                        + "from user "
+//                        + "where username = ?")
+//                .authoritiesByUsernameQuery("select u.username,r.role " // 권한
+//                        + "from user_role ur inner join user u on ur.user_id = u.id "
+//                        + "inner join role r on ur.role_id = r.id "
+//                        + "where u.username = ?");
+//    }
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
