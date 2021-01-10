@@ -11,7 +11,7 @@
             <input type="hidden" id="changeFlag" value="m">
             <a type="button" class="text-end btn btn-primary" id="change">이미지로 변경</a>
         </div>
-            <center><h2 id="musicTitle" style="color:red" th:text="${musicItem.title}"></h2>
+            <center><pre id="musicTitle" style="color:red;font-size:25px" th:text="${musicItem.title}"></pre>
                 <p style="float:right; " th:text="${musicItem.id}" id="id" name="id"></p>
 
             </center>
@@ -35,25 +35,25 @@
                 <thead>
                     <th width="10">
                     </th>
-                    <th width="400">
+                    <th width="500">
                     </th>
-                    <th width="10">
+                    <th width="10" th:if="${musicItem.Items[0].rightLyrics != 'null'}">
                     </th>
-                    <th width="400">
+                    <th width="500" th:if="${musicItem.Items[0].rightLyrics != 'null'}">
                     </th>
                 </thead>
                 <tbody th:each="item:${musicItem.Items}" >
                 <tr >
                     <td width="10"></td>
                     <td style="color:red;" th:text="${item.leftCode}"></td>
-                    <td width="10"></td>
-                    <td style="color:red;" th:text="${item.rightCode}"></td>
+                    <td width="10" th:if="${musicItem.Items[0].rightLyrics != 'null'}"></td>
+                    <td style="color:red;" th:if="${musicItem.Items[0].rightLyrics != 'null'}" th:text="${item.rightCode}"></td>
                 </tr>
-                <tr>
+                <tr >
                     <td width="10" th:text="${item.leftChorus}"></td>
                     <td th:text="${item.leftLyrics}"></td>
-                    <td width="10" th:text="${item.rightChorus}"></td>
-                    <td th:text="${item.rightLyrics}"></td>
+                    <td width="10" th:if="${musicItem.Items[0].rightLyrics != 'null'}" th:text="${item.rightChorus}"></td>
+                    <td th:if="${musicItem.Items[0].rightLyrics != 'null'}" th:text="${item.rightLyrics}"></td>
                 </tr>
                 </tbody>
             </table>

@@ -11,10 +11,7 @@ import com.neo.myhome.validator.BoardValidator;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -23,8 +20,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -110,6 +105,7 @@ public class BoardController {
     }
     @PostMapping("/formAdd")
     public String formAddSubmit(@Valid MusicItem item, BindingResult bindingResult, Authentication authentication){
+//        item.setId("95");
         MusicItem checkItem = musicService.searchMusicItem(item);
         if(checkItem == null){
             musicService.insertMusicItem(item);
@@ -133,7 +129,7 @@ public class BoardController {
     }
     @GetMapping("/music")
     @ResponseBody
-    public ResponseEntity<InputStreamResource> music(String id) throws IOException {
+    public byte[] music(String id) throws IOException {
         String end ="";
 
         if(id.indexOf("_")==-1){
@@ -144,13 +140,11 @@ public class BoardController {
         }
         id = "000".substring(id.length())+id+end;
 
-        ClassPathResource resource = new ClassPathResource("mp3/music"+id+".mp3");
-        File file = resource.getFile();
+        ClassPathResource resource = new ClassPathResource("/mp3/music"+id+".mp3");
+        InputStream io = resource.getInputStream();
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-disposition","attachment; filename=music"+id+".mp3");
-        return ResponseEntity.ok().headers(headers).contentLength(file.length())
-                .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .body(new InputStreamResource(new FileInputStream(file)));
+        return IOUtils.toByteArray(io);
     }
     @GetMapping("/image")
     @ResponseBody
@@ -165,8 +159,7 @@ public class BoardController {
         }
         id = "000".substring(id.length())+id+end;
 
-        ClassPathResource resource = new ClassPathResource("image/music"+id+".jpg");
-        File file = resource.getFile();
+        ClassPathResource resource = new ClassPathResource("/image/music"+id+".jpg");
         InputStream io = resource.getInputStream();
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-disposition","attachment; filename=music"+id+".jpg");
